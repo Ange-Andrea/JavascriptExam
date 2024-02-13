@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="assets/js/includer.js"></script>
+<link rel="stylesheet" href="assets/css/essaie.css">
+<link rel="stylesheet" href="assets/css/login.css">
+
+<div w3-include-html="header.html"></div>
+
+<body>
+
+    <div class="w3-top">
+        <div class="w3-bar w3-black w3-card">
+          <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)"
+            onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+          <img src="p.png" style="height: 50px;" />
+          <a href="index.html" class="w3-bar-item w3-button w3-padding-large">ACCUEIL</a>
+          <a href="essaie.html" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i
+              class="fa fa-search"></i></a>
+          <a href="javascript:void(0)" id="user-profile-login" class="w3-padding-large w3-hover-red w3-hide-small w3-right"
+            onclick="document.getElementById('id01').style.display='block'" style="width:auto;">
+          </a>
+          <div id="id01" class="modal">
+    
+            <form class="modal-content animate">
+              <div class="imgcontainer">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close"
+                  title="Close Modal">&times;</span>
+              </div>
+              <h1 style="color: black; text-align:center;"> LOGIN </h1>
+    
+              <div class="container">
+                <label for="uname"><b>Username</b></label>
+                <input type="text" id="username" placeholder="Enter Username" name="uname" required>
+    
+                <label for="psw"><b>Password</b></label>
+                <input type="password" id="password" placeholder="Enter Password" name="psw" required>
+                <label style="color: black;">
+                  <input type="checkbox" checked="checked" name="remember"> Remember me
+                </label>
+    
+                <p id="credentialsError"></p>
+    
+                <button type="button" id="btnLogin">Login</button>
+              </div>
+    
+              <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('id01').style.display='none'"
+                  class="cancelbtn">Cancel</button>
+                <span class="psw">Forgot <a href="#">password?</a></span>
+              </div>
+            </form>
+          </div>
+    
+        </div>
+      </div>
+    <div class="bg-text">
+        <div class="search-container">
+            <input type="text" id="search-input" onkeyup="searchMovies()" placeholder="Search for names.."
+                title="Type in a name">
+
+        </div>
+    </div>
+    <main id="main"></main>
+    
+</body>
+<script>includeHTML();</script>
+<script src="assets/js/login.js"></script>
+<script src="assets/js/essaie.js"></script>
+
+<script type="module">
+
+    // LOGIN SCRIPT
+  
+    import { login } from "../utils/tmdb-api-rest.js"
+  
+    const btnLogin = document.getElementById("btnLogin");
+  
+    const credentialsError = document.getElementById("credentialsError");
+  
+    function initLogin() {
+      credentialsError.innerHTML = ""
+  
+      const username = document.getElementById("username");
+      const password = document.getElementById("password");
+      if (!username.value) {
+        alert("fill username");
+        return
+      }
+      if (!password.value) {
+        alert("fill password");
+        return;
+      }
+      const loginData = {
+        password: password.value,
+        username: username.value
+      }
+      try {
+        login(loginData).then(sessionData => {
+          location.reload();
+        }).catch(data => { })
+      } catch (error) {
+        credentialsError.style.color = "red";
+        credentialsError.innerHTML = "Mot de passe ou nom d'utilisateur incorrect"
+      }
+  
+    }
+    btnLogin.addEventListener("click", initLogin);
+  
+  </script>
+  
+  
+  <script type="module">
+    import { auth } from "../utils/tmdb-api-rest.js"
+    const userProfileLoginEle = document.getElementById('user-profile-login');
+    userProfileLoginEle.innerHTML = `<span class="fa fa-lock "></span> Connexion`
+  
+    auth().then(data => {
+      let accountData = localStorage.getItem('account_data');
+      if (accountData) {
+        accountData = JSON.parse(accountData);
+        if (accountData.username) {
+          userProfileLoginEle.innerHTML = `<span class="fa fa-user-circle"> </span> ${accountData.username}`
+        }
+      }
+    })
+  </script>

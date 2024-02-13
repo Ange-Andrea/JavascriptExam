@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Movie</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="assets/js/includer.js"></script>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open Sans">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="assets/css/movie.css">
+  <link rel="stylesheet" href="assets/css/login.css">
+
+  <style>
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: "Oswald"
+    }
+
+    body {
+      font-family: "Open Sans"
+    }
+  </style>
+</head>
+
+<body class="w3-light-grey">
+
+  <!-- Navigation bar with social media icons -->
+  <div class="w3-top">
+    <div class="w3-bar w3-black w3-card">
+      <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)"
+        onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+      <img src="p.png" style="height: 50px;" />
+      <a href="index.html" class="w3-bar-item w3-button w3-padding-large">ACCUEIL</a>
+      <a href="essaie.html" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i
+          class="fa fa-search"></i></a>
+      <a href="javascript:void(0)" id="user-profile-login" class="w3-padding-large w3-hover-red w3-hide-small w3-right"
+        onclick="document.getElementById('id01').style.display='block'" style="width:auto;">
+      </a>
+      <div id="id01" class="modal">
+
+        <form class="modal-content animate">
+          <div class="imgcontainer">
+            <span onclick="document.getElementById('id01').style.display='none'" class="close"
+              title="Close Modal">&times;</span>
+          </div>
+          <h1 style="color: black; text-align:center;"> LOGIN </h1>
+
+          <div class="container">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" id="username" placeholder="Enter Username" name="uname" required>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" id="password" placeholder="Enter Password" name="psw" required>
+            <label style="color: black;">
+              <input type="checkbox" checked="checked" name="remember"> Remember me
+            </label>
+
+            <p id="credentialsError"></p>
+
+            <button type="button" id="btnLogin">Login</button>
+          </div>
+
+          <div class="container" style="background-color:#f1f1f1">
+            <button type="button" onclick="document.getElementById('id01').style.display='none'"
+              class="cancelbtn">Cancel</button>
+            <span class="psw">Forgot <a href="#">password?</a></span>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+  <!-- w3-content defines a container for fixed size centered content, 
+and is wrapped around the whole page content, except for the footer in this example -->
+  <div class="w3-content" style="max-width:1600px">
+
+    <!-- Grid -->
+    <div class="w3-row w3-padding w3-border">
+      <div class="w3-col l12 s12" style="padding-top: 16px;">
+        <div class="w3-container w3-white w3-margin w3-padding-large"   id="movie-details">
+        
+        </div>
+      </div>
+      
+  <!-- Contact Section -->
+  <div class="w3-container w3-padding-32" id="contact">
+    <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Contact</h3>
+    <p>Do you like the Movie? Any Comment?.</p>
+    <form action="/action_page.php" target="_blank">
+      <input class="w3-input w3-section w3-border" type="text" placeholder="Comment" required name="Comment">
+      <button class="w3-button w3-black w3-section" type="submit">
+        <i class="fa fa-paper-plane"></i> SEND MESSAGE
+      </button>
+    </form>
+  </div>
+
+ 
+
+  <script>
+    // Toggle between hiding and showing blog replies/comments
+    const myBtn = document.getElementById("myBtn");
+    if(myBtn)
+    myBtn.click();
+    function myFunction(id) {
+      var x = document.getElementById(id);
+      if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+      } else {
+        x.className = x.className.replace(" w3-show", "");
+      }
+    }
+
+    function likeFunction(x) {
+      x.style.fontWeight = "bold";
+      x.innerHTML = "✓ Liked";
+    }
+  </script>
+
+
+<script type="module">
+  // movie-script.js
+    import { getMovie, getMovieReviews } from "../utils/tmdb-api-rest.js";
+    import { Movie } from "../models/movie.class.js";
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const params = new URLSearchParams(window.location.search);
+  const movieId = params.get('id');
+
+  getMovie(movieId).then((data) => {
+    const movie  =  new Movie(data) ;
+
+    const movieEle = document.querySelector("#movie-details");
+    
+    movieEle.innerHTML = `<div class="w3-row ">
+            <div class="w3-col l6 s12">
+              <div 
+                class="mov-img-description"
+              style="background: url(${movie.image_original}); background-size:cover;"></div>
+              <!-- <img src="assets/images/muneca.jpg" alt="Girl Hat" style="width:100%" class="w3-padding-16"> -->
+            </div>
+            <div class="w3-col l6 s12 mov-description ">
+              <div class="w3-center">
+                <h3>${movie.title}</h3>
+                <h5>${movie.tagline}, <span class="w3-opacity">${movie.release_date}</span></h5>
+                <div class="w3-justify">
+                  ${movie.overview}                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="l12 s12">
+            <p class="w3-left"><button class="w3-button w3-white w3-border" onclick="likeFunction(this)"><b><i
+                    class="fa fa-thumbs-up"></i> Like</b></button>
+             </p>
+             <div id="comments"></div>
+          </div>`;
+  
+
+          getMovieReviews(movieId).then((data) => {
+            const commentsEle = document.getElementById("comments");
+            data.results.forEach(comment => {
+              commentsEle.innerHTML += `
+              <div class="w3-row w3-margin-bottom" id="demo1">
+              <hr>
+              <div class="w3-col l2 m3">
+                <img src="https://image.tmdb.org/t/p/original/${comment.author_details.avatar_path} " style="width:90px;">
+              </div>
+              <div class="w3-col l10 m9">
+                <h4>${comment.author} <span class="w3-opacity w3-medium">${comment.updated_at}</span></h4>
+                <p>${comment.content}</p>
+              </div>
+            </div>
+              `
+            });
+            // data.
+          })
+          
+         
+
+          
+  })
+});
+
+  </script>
+
+<script type="module">
+  // script.js
+  import {API_AUTH_KEY} from "../config.js"
+  
+  </script>
+  <script>includeHTML();</script>
+
+  <script type="module">
+
+    // LOGIN SCRIPT
+  
+    import { login } from "../utils/tmdb-api-rest.js"
+  
+    const btnLogin = document.getElementById("btnLogin");
+  
+    const credentialsError = document.getElementById("credentialsError");
+  
+    function initLogin() {
+      credentialsError.innerHTML = ""
+  
+      const username = document.getElementById("username");
+      const password = document.getElementById("password");
+      if (!username.value) {
+        alert("fill username");
+        return
+      }
+      if (!password.value) {
+        alert("fill password");
+        return;
+      }
+      const loginData = {
+        password: password.value,
+        username: username.value
+      }
+      try {
+        login(loginData).then(sessionData => {
+          location.reload();
+        }).catch(data => { })
+      } catch (error) {
+        credentialsError.style.color = "red";
+        credentialsError.innerHTML = "Mot de passe ou nom d'utilisateur incorrect"
+      }
+  
+    }
+    btnLogin.addEventListener("click", initLogin);
+  
+  </script>
+  
+  
+  <script type="module">
+    import { auth } from "../utils/tmdb-api-rest.js"
+    const userProfileLoginEle = document.getElementById('user-profile-login');
+    userProfileLoginEle.innerHTML = `<span class="fa fa-lock "></span> Connexion`
+  
+    auth().then(data => {
+      let accountData = localStorage.getItem('account_data');
+      if (accountData) {
+        accountData = JSON.parse(accountData);
+        if (accountData.username) {
+          userProfileLoginEle.innerHTML = `<span class="fa fa-user-circle"> </span> ${accountData.username}`
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

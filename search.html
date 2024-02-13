@@ -2,6 +2,8 @@
 <html lang="en">
 <script src="assets/js/includer.js"></script>
 <link rel="stylesheet" href="assets/css/search.css">
+<link rel="stylesheet" href="assets/css/login.css">
+
 <div w3-include-html="header.html"></div>
 
 <body>
@@ -11,21 +13,25 @@
     <div class="w3-content" style="max-width:1000px;height:500px">
         <div class="bg-image"></div>
         <div class="bg-text">
-            <h2>Rechercher les films en attendance </h2>
+            <!-- <h2>Recherchez les films en Tendance </h2> -->
+            <div class="search-container">
+                <input type="text" id="search-input" onkeyup="searchMovies()" placeholder="Search for names.."
+                    title="Type in a name">
 
-            <input type="text" id="searchInput" onkeyup="search()" placeholder="Search for names.."
-                title="Type in a name">
-            <ul id="autoCompletion">
+            </div>
+            <!-- <ul id="autoCompletion">
                 <li><a href="#">Adele</a></li>
                 <li><a href="#">Agnes</a></li>
                 <li><a href="#">Billy</a></li>
                 <li><a href="#">Bob</a></li>
                 <li><a href="#">Calvin</a></li>
-                <!-- <li><a href="#">Christina</a></li>
-                <li><a href="#">Cindy</a></li> -->
-            </ul>
+               
+            </ul> -->
         </div>
     </div>
+    
+    <main id="main"></main>
 </body>
 <script>includeHTML();</script>
+<script src="assets/js/login.js"></script>
 <script src="assets/js/search.js"></script>
